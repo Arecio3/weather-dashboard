@@ -1,9 +1,9 @@
 
 var fiveDay = moment().add(1, 'days').calendar();
 var todayEl = document.getElementById("today");
-var historyEl = document.getElementById("history")
-var forecastEl = $("#forecast");
-// click event on the search button
+var historyEl = document.getElementById("history");
+var forecastElement = document.getElementById("forecast");
+// gets items from local storage parses it, empty array allows for there to be no history
 var cities = JSON.parse(localStorage.getItem("cities")) || [];
 var ulEl = document.createElement("ul")
 
@@ -20,6 +20,7 @@ function saveSearch() {
     var searchValue = document.getElementById("search-value").value;
 
     if (!cities.includes(searchValue)) {
+        // this puts the last city that was searched in the front of the array, length of array
         cities.unshift(searchValue);
         localStorage.setItem("cities", JSON.stringify(cities));
 
@@ -33,19 +34,22 @@ function saveSearch() {
 
 
 function saveSearchValue () {
+    // get or set HTML mark up that was set or added 
     historyEl.innerHTML = "";
     console.log(cities);
+    // goes through the array of cities that was searched and makes a button out of each them
     for (var i = 0; i < cities.length; i++) {
         var previousCity = document.createElement("button");
         // setting value of cityname to the array
         previousCity.setAttribute("cityName", cities[i])
+        // puts the name of the city that was searched on the button
         previousCity.textContent = cities[i];
        
         // tells to run getweather function and gets the attribute cityName
         previousCity.addEventListener("click", function () {
             getWeather(this.getAttribute("cityName"));
         })
-
+        // puts it on the page 
         historyEl.appendChild(previousCity);
         
     }
@@ -67,29 +71,31 @@ function getWeather(searchValue) {
             
             console.log("This is the data----");
             console.log(data);
+            // hook into data 
             var cityName = data.name;
             var temp = data.main.temp;
             var wind = data.wind.speed
             var humidity = data.main.humidity
             var longitude = data.coord.lon;
             var latitude = data.coord.lat;
+            //calls function with specific value 
             uvIndex(latitude, longitude);
 
             var iconUrl = "https://openweathermap.org/img/wn/" + data.weather[0].icon + ".png";
 
-            
+            // create elements for data
             var iconImage = document.createElement("img");
             var cityNameEl = document.createElement("h1");
             var windliEl = document.createElement("li");
             var templiEl = document.createElement("li");
             var humidityliEl = document.createElement("li");
             
-            
+            // sets img attr = to icon data
             iconImage.setAttribute("src", iconUrl);
 
 
 
-            
+            // putting the text of the city name + date
             $(cityNameEl).text(cityName + " " + dateEl);
             todayEl.append(cityNameEl);
             todayEl.append(iconImage);
@@ -102,7 +108,7 @@ function getWeather(searchValue) {
 
             $(humidityliEl).text("Humidity: " + humidity + " %")
             todayEl.append(humidityliEl);
-
+            // todays weather container css
             $(todayEl).css({ "border": "black solid 2px", "border-radius": "0.5em", "padding": "10px" });
 
         
@@ -112,6 +118,7 @@ function getWeather(searchValue) {
 
 
         })
+        // sets everything that was added to actually markup 
     $(todayEl).html("");
 
 
@@ -150,9 +157,11 @@ function fiveDayCast(searchValue) {
         }).then(function (data) {
             console.log(data);
             
-            forecastEl.innerHTML = "";
+            forecastElement.innerHTML = "";
+            // sets the variable to get the dates of all 5 days in the for loop
             var day = 1;
             for (var i = 0; i < data.list.length; i++) {
+                // if that date text is equal to 3:00 grab it
                 if (data.list[i].dt_txt.indexOf("15:00:00")!== -1){
                     var todayDate = moment().add(day, 'days').format("MM/DD/YYYY");
                     var iconUrl = "https://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + ".png";
@@ -184,7 +193,7 @@ function fiveDayCast(searchValue) {
                     cardEl.append(windliEl);
                     cardEl.append(humidityliEl);
 
-                    forecastEl.append(cardEl);
+                    forecastElement.append(cardEl);
 
 
                     day++;
