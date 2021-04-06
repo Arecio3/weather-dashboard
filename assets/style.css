@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Ramabhadra&display=swap');
+
+h1 {
+    
+    font-family: 'Ramabhadra', sans-serif;
+}
+
+.card {
+    background-color: #ABDBCE;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.card img {
+    height: 40px;
+    width: 40px;
+}
+
+.custom-container {
+    background-color: #ABDBCE;
+}
+
+.custom-container2 {
+    list-style-type: none;
+}
+
+
+
