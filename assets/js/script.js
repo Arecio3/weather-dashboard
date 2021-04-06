@@ -1,4 +1,4 @@
-
+var weatherKey = "5cdf849bdb222580b127afdee2a2acdb";
 var fiveDay = moment().add(1, 'days').calendar();
 var todayEl = document.getElementById("today");
 var historyEl = document.getElementById("history");
