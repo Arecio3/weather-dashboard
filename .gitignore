@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+
+#j.s file
+./assets/js/api.js
