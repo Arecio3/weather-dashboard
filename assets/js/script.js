@@ -1,4 +1,5 @@
 var weatherKey = "5cdf849bdb222580b127afdee2a2acdb";
+
 var fiveDay = moment().add(1, 'days').calendar();
 var todayEl = document.getElementById("today");
 var historyEl = document.getElementById("history");
@@ -48,6 +49,7 @@ function saveSearchValue () {
         // tells to run getweather function and gets the attribute cityName
         previousCity.addEventListener("click", function () {
             getWeather(this.getAttribute("cityName"));
+            fiveDayCast(this.getAttribute("cityName"));
         })
         // puts it on the page 
         historyEl.appendChild(previousCity);
@@ -67,6 +69,8 @@ function getWeather(searchValue) {
             return response.json()
 
         }).then(function (data) {
+            // clearing contents inside element so you can add the new data 
+            todayEl.innerHTML = "";
             var dateEl = moment().format("MM/DD/YYYY");
             
             console.log("This is the data----");
@@ -119,7 +123,7 @@ function getWeather(searchValue) {
 
         })
         // sets everything that was added to actually markup 
-    $(todayEl).html("");
+    
 
 
 }
@@ -139,9 +143,22 @@ function uvIndex(latitude, longitude) {
             console.log(uviValue);
 
 
-
             var uviEl = document.createElement("li");
-            $(uviEl).text("UV Index: " + uviValue)
+            uviEl.style.width = "max-content";
+            uviEl.style.padding = "5px";
+            uviEl.innerHTML = "UV Index: " + uviValue;
+            
+            if (uviValue < 3) {
+                uviEl.style.backgroundColor = "green"
+            } else if (uviValue < 6) {
+                uviEl.style.backgroundColor = "yellow"
+            } else if (uviValue < 8) {
+                uviEl.style.backgroundColor = "orange"
+            } else if (uviValue < 11) {
+                uviEl.style.backgroundColor = "red"
+            } else {
+                uviEl.style.backgroundColor = "purple"
+            }
             todayEl.append(uviEl);
         })
 
@@ -159,11 +176,12 @@ function fiveDayCast(searchValue) {
             
             forecastElement.innerHTML = "";
             // sets the variable to get the dates of all 5 days in the for loop
-            var day = 1;
+            // var day = 1;
             for (var i = 0; i < data.list.length; i++) {
                 // if that date text is equal to 3:00 grab it
                 if (data.list[i].dt_txt.indexOf("15:00:00")!== -1){
-                    var todayDate = moment().add(day, 'days').format("MM/DD/YYYY");
+                    // var todayDate = moment().add(day, 'days').format("MM/DD/YYYY");
+                    var todayDate = moment.unix(data.list[i].dt).format("MM/DD/YYYY");
                     var iconUrl = "https://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + ".png";
                     var temp = "Temp:" + " " + data.list[i].main.temp + "°F";
                     var wind = "Wind-speed:" + " " + data.list[i].wind.speed + " " + "MPH";
@@ -196,7 +214,7 @@ function fiveDayCast(searchValue) {
                     forecastElement.append(cardEl);
 
 
-                    day++;
+                    // day++;
                 }
             }
 
