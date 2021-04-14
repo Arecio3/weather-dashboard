@@ -1,3 +1,4 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 # weather-dashboard
 Web Page that allows user to type in any VALID city of their choice and through a weather API they will be able to see.
 
